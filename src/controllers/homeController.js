@@ -1,23 +1,5 @@
 // import configViewEngine from "../configs/viewEngine";
-import { name } from 'ejs';
-import pg from 'pg';
-
-// Cấu hình kết nối với PostgreSQL
-const db = new pg.Client({
-    user: "postgres",
-    host: "localhost",
-    database: "jwt",
-    password: "071052443",
-    port: 5432,
-  });
-  db.connect();
-
-  
-
-
-
-
-
+import usersService from '../service/usersService'
 const homeHandle = (req, res) => {
     res.render("home.ejs");
 }
@@ -30,9 +12,16 @@ const handleCreateNewUser = (req, res) => {
     let email = req.body.email;
     let password = req.body.password;
     let userName = req.body.username;
+
+    // usersService.createNewUser(email, password, userName);
+    usersService.getUserList();
     
-    const insertNewUser = db.query("INSERT INTO users (email, password, username) VALUES ($1, $2, $3)", [email, password, userName]);
-    console.log("check new user >>", insertNewUser);
+    
+
+    // let check = bcrypt.compareSync(password, hashPassword); // true
+
+   
+
     res.send("create user succsess");
 }
 
