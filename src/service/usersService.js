@@ -1,17 +1,6 @@
 import bcrypt from 'bcryptjs';
-import { Pool } from 'pg';
 const salt = bcrypt.genSaltSync(10);
-
-
-// Cấu hình kết nối với PostgreSQL
-const pool = new Pool({
-    user: "postgres",
-    host: "localhost",
-    database: "jwt",
-    password: "071052443",
-    port: 5432,
-  });
-
+import pool from "../configs/database";
 
 const hashUserPassword = (userPassword) => {
     let hashPassword = bcrypt.hashSync(userPassword, salt);
@@ -19,9 +8,14 @@ const hashUserPassword = (userPassword) => {
 }
 
 const createNewUser = async (email, password, userName) => {
-    let hassPass = hashUserPassword(password);
-    const insertNewUser = await pool.query("INSERT INTO users (email, password, username) VALUES ($1, $2, $3)", [email, hassPass, userName]);
-    console.log("check new user >>", insertNewUser.rows);
+    try {
+        let hassPass = hashUserPassword(password);
+        const insertNewUser = await pool.query("INSERT INTO users (email, password, username) VALUES ($1, $2, $3)", [email, hassPass, userName]);
+        console.log("check new user >>", insertNewUser.rows);
+    } catch (err) {
+        console.log("404", err);
+    }
+    
 }
 
 const getUserList = async () => {
