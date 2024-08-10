@@ -13,8 +13,8 @@ const handleCreateNewUser = (req, res) => {
     let password = req.body.password;
     let userName = req.body.username;
 
-    // usersService.createNewUser(email, password, userName);
-    usersService.getUserList();
+    usersService.createNewUser(email, password, userName);
+    // usersService.getUserList();
     
     
 
