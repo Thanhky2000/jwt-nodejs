@@ -19,9 +19,14 @@ const createNewUser = async (email, password, userName) => {
 }
 
 const getUserList = async () => {
-   
-        let result = await pool.query("SELECT * FROM users");
-        console.log("check>>", result.rows);
+        try {
+            let result = await pool.query("SELECT * FROM users");
+            return result.rows;
+        } catch (err) {
+            console.log("404", err);
+            return [];
+        }
+        
         
         
    

@@ -4,7 +4,9 @@ const homeHandle = (req, res) => {
     res.render("home.ejs");
 }
 
-const handleUserPage = (req, res) => {
+const handleUserPage = async(req, res) => {
+    let usersList = await usersService.getUserList();
+    console.log("check userList >>", usersList);
     res.render("user.ejs");
 }
 
@@ -14,7 +16,7 @@ const handleCreateNewUser = (req, res) => {
     let userName = req.body.username;
 
     usersService.createNewUser(email, password, userName);
-    // usersService.getUserList();
+    
     
     
 
