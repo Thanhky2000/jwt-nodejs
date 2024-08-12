@@ -7,7 +7,7 @@ const homeHandle = (req, res) => {
 const handleUserPage = async(req, res) => {
     let usersList = await usersService.getUserList();
     console.log("check userList >>", usersList);
-    res.render("user.ejs");
+    res.render("user.ejs", {usersList});
 }
 
 const handleCreateNewUser = (req, res) => {
