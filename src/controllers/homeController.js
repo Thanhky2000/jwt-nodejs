@@ -1,4 +1,3 @@
-// import configViewEngine from "../configs/viewEngine";
 import usersService from '../service/usersService'
 const homeHandle = (req, res) => {
     res.render("home.ejs");

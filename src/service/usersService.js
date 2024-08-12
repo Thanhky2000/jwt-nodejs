@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 const salt = bcrypt.genSaltSync(10);
-import pool from "../configs/database";
+import pool from "../config/database";
 
 const hashUserPassword = (userPassword) => {
     let hashPassword = bcrypt.hashSync(userPassword, salt);
