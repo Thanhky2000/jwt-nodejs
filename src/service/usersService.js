@@ -11,6 +11,7 @@ const createNewUser = async (email, password, userName) => {
     try {
         let hassPass = hashUserPassword(password);
         const insertNewUser = await pool.query("INSERT INTO users (email, password, username) VALUES ($1, $2, $3)", [email, hassPass, userName]);
+        return insertNewUser.rows;
     } catch (err) {
         console.log("404", err);
     }
@@ -27,8 +28,27 @@ const getUserList = async () => {
         }
 }
 
+const updateUser = async (id) => {
+    try {
+        let result = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
+        return result.rows;
+    } catch (err) {
+        console.log("404", err);
+        return [];
+    }
+}
+
+const updataInfoUser = async (email, userName, id) => {
+    try {
+        let result = await pool.query("UPDATE users SET email = $1, username= $2 WHERE id = $3", [email, userName, id]);
+        return result.rows;
+    } catch (err) {
+        console.log("404", err);
+        return [];
+    }
+}
+
 const deleteUser = async (id) => {
-//    ("DELETE FROM users WHERE id = 8");
 try {
     let result = await pool.query("DELETE FROM users WHERE id = $1", [id]);
     return result.rows;
@@ -36,13 +56,16 @@ try {
     console.log("404", err);
     return [];
 }
-   
-   
 }
 
 
 module.exports = {
     createNewUser,
     getUserList,
+    updateUser,
     deleteUser,
+    updataInfoUser,
 }
+
+
+

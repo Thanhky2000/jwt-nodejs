@@ -6,8 +6,6 @@ const homeHandle = (req, res) => {
 
 const handleUserPage = async(req, res) => {
     let usersList = await usersService.getUserList();
-    await usersService.deleteUser(21);
-    console.log("check userList >>", usersList);
     res.render("user.ejs", {usersList});
 }
 
@@ -15,10 +13,20 @@ const handleCreateNewUser = (req, res) => {
     let email = req.body.email;
     let password = req.body.password;
     let userName = req.body.username;
-
     usersService.createNewUser(email, password, userName);
-    
-    res.redirect("/user");
+    return res.redirect("/user");
+}
+
+const handleUpdateUser = async (req, res) => {
+//  let email = req.body.email;
+//  let userName = req.body.username;
+ let id = req.params.id;
+ let user = await usersService.updateUser(id);
+ let userData = {};
+ if(user && user.length > 0) {
+    userData = user[0];
+ }
+ res.render("update.ejs", {userData})
 }
 
 const handleDeleteUser = async (req, res) => {
@@ -26,10 +34,20 @@ const handleDeleteUser = async (req, res) => {
     await usersService.deleteUser(id);
     res.redirect("/user");
 }
+const handleSaveNewInfo = async (req, res) => {
+    let email =  req.body.email;
+    let userName = req.body.username;
+    let id = req.body.id;
+   await usersService.updataInfoUser(email, userName, id);
+   return res.redirect("/user");
+}
+
 
 module.exports = {
     homeHandle,
     handleUserPage,
     handleCreateNewUser,
     handleDeleteUser,
+    handleUpdateUser,
+    handleSaveNewInfo,
 }
