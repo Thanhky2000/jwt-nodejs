@@ -1,6 +1,17 @@
 import bcrypt from 'bcryptjs';
+import { Pool } from 'pg';
+
+
 const salt = bcrypt.genSaltSync(10);
-import pool from "../config/database";
+
+// Cấu hình kết nối với PostgreSQL
+const pool = new Pool({
+    user: "postgres",
+    host: "localhost",
+    database: "jwt",
+    password: "071052443",
+    port: 5432,
+  });
 
 const hashUserPassword = (userPassword) => {
     let hashPassword = bcrypt.hashSync(userPassword, salt);
@@ -10,17 +21,17 @@ const hashUserPassword = (userPassword) => {
 const createNewUser = async (email, password, userName) => {
     try {
         let hassPass = hashUserPassword(password);
-        const insertNewUser = await pool.query("INSERT INTO users (email, password, username) VALUES ($1, $2, $3)", [email, hassPass, userName]);
+        const insertNewUser = await pool.query('INSERT INTO "Users" (email, password, username, createdAt, updatedAt) VALUES ($1, $2, $3, NOW(), NOW()) RETURNING *', [email, hassPass, userName]);
         return insertNewUser.rows;
     } catch (err) {
-        console.log("404", err);
+        console.log("check >>", err);
     }
-    
+
 }
 
 const getUserList = async () => {
         try {
-            let result = await pool.query("SELECT * FROM users");
+            let result = await pool.query('SELECT * FROM Users');
             return result.rows;
         } catch (err) {
             console.log("404", err);
@@ -30,7 +41,7 @@ const getUserList = async () => {
 
 const updateUser = async (id) => {
     try {
-        let result = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
+        let result = await pool.query('SELECT * FROM Users WHERE id = $1', [id]);
         return result.rows;
     } catch (err) {
         console.log("404", err);
@@ -40,7 +51,7 @@ const updateUser = async (id) => {
 
 const updataInfoUser = async (email, userName, id) => {
     try {
-        let result = await pool.query("UPDATE users SET email = $1, username= $2 WHERE id = $3", [email, userName, id]);
+        let result = await pool.query('UPDATE Users SET email = $1, username= $2 WHERE id = $3', [email, userName, id]);
         return result.rows;
     } catch (err) {
         console.log("404", err);
@@ -50,7 +61,7 @@ const updataInfoUser = async (email, userName, id) => {
 
 const deleteUser = async (id) => {
 try {
-    let result = await pool.query("DELETE FROM users WHERE id = $1", [id]);
+    let result = await pool.query('DELETE FROM Users WHERE id = $1', [id]);
     return result.rows;
 } catch (err) {
     console.log("404", err);

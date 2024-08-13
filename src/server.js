@@ -3,6 +3,7 @@ import express from "express";
 import configViewEngine from "./config/viewEngine";
 import initWebRoute from "./routes/web";
 import bodyParser from "body-parser";
+// import Connection from "./config/dbConnect";
 
 
 
@@ -15,7 +16,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 configViewEngine(app);
 
+
+// Connection();
+
 initWebRoute(app);
+
+
 
 app.listen(PORT, () => {
     console.log(`Listen on port ${PORT}`);
