@@ -35,18 +35,31 @@ const createNewUser = async (email, password, userName) => {
 
 
 
+// const getUserList = async () => {
+//         // try {
+//         //     let result = await pool.query('SELECT * FROM Users');
+//         //     return result.rows;
+//         // } catch (err) {
+//         //     console.log("404", err);
+//         //     return [];
+//         // }
+//         let users = []
+//         users = await db.User.findAll();
+//         return users;
+// }
+
 const getUserList = async () => {
-        // try {
-        //     let result = await pool.query('SELECT * FROM Users');
-        //     return result.rows;
-        // } catch (err) {
-        //     console.log("404", err);
-        //     return [];
-        // }
-        let users = []
-        users = await db.User.findAll();
+    try {
+        let users = await db.User.findAll({
+            attributes: ['id', 'email', 'username', 'groupId'] // Thay thế bằng các thuộc tính bạn cần
+        });
         return users;
-}
+    } catch (err) {
+        console.log("404", err);
+        return [];
+    }
+};
+
 
 const updateUser = async (id) => {
     // try {
